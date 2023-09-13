@@ -24,13 +24,15 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const stateData = JSON.parse(sessionStorage.getItem('user') ?? '{}')
 
-    if (stateData) {
+    if (Object.keys(stateData).length) {
       setState(stateData)
     }
   }, [])
 
   useEffect(() => {
-    sessionStorage.setItem('user', JSON.stringify(state))
+    if (state !== null) {
+      sessionStorage.setItem('user', JSON.stringify(state))
+    }
   }, [state])
 
   return (

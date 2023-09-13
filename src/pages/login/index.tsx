@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import {
   Box,
   Grid,
@@ -15,12 +15,19 @@ import * as yup from 'yup'
 import './styles.scss'
 import { useLogin } from '../../service/queries/user'
 import UserContext from '../../context/user'
+import useRedirectLogged from '../../hooks/useRedirectLogged'
+import Modal from '../../components/Modal'
 
 const LoginPage = () => {
+  useRedirectLogged()
+
   const navigate = useNavigate()
   const theme = useTheme()
   const loginRequest = useLogin()
   const { setState: setUserState } = useContext(UserContext)
+
+  const [errorMessage, setErrorMessage] = useState('')
+  const [openModal, setOpenModal] = useState(false)
 
   const formik = useFormik({
     initialValues: {
@@ -39,7 +46,14 @@ const LoginPage = () => {
         email: values.email,
         password: values.password,
       })
-      setUserState(response)
+
+      if (response.data) {
+        setUserState(response.data)
+        navigate(routes.HOME)
+      } else if (response.error) {
+        setErrorMessage(response.error.message)
+        setOpenModal(true)
+      }
     },
   })
 
@@ -110,6 +124,16 @@ const LoginPage = () => {
           </Grid>
         </Grid>
       </Box>
+
+      <Modal
+        open={openModal}
+        onClose={() => {
+          setOpenModal(false)
+        }}
+        title={'Erro ao entrar na conta'}
+      >
+        <Typography variant="body1">{errorMessage}</Typography>
+      </Modal>
     </form>
   )
 }

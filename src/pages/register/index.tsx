@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import {
   Box,
   Button,
@@ -20,12 +20,19 @@ import { useFormik } from 'formik'
 import * as yup from 'yup'
 import { useCreateUser } from '../../service/queries/user'
 import UserContext from '../../context/user'
+import useRedirectLogged from '../../hooks/useRedirectLogged'
+import Modal from '../../components/Modal'
 
 const RegisterPage = () => {
+  useRedirectLogged()
+
   const navigate = useNavigate()
   const theme = useTheme()
   const createUserRequest = useCreateUser()
   const { setState: setUserState } = useContext(UserContext)
+
+  const [errorMessage, setErrorMessage] = useState('')
+  const [openModal, setOpenModal] = useState(false)
 
   const formik = useFormik({
     initialValues: {
@@ -71,7 +78,13 @@ const RegisterPage = () => {
         ...values,
       })
 
-      setUserState(response)
+      if (response.data) {
+        setUserState(response)
+        navigate(routes.HOME)
+      } else if (response.error) {
+        setErrorMessage(response.error.message)
+        setOpenModal(true)
+      }
     },
   })
 
@@ -324,6 +337,16 @@ const RegisterPage = () => {
           </Grid>
         </Grid>
       </Box>
+
+      <Modal
+        open={openModal}
+        onClose={() => {
+          setOpenModal(false)
+        }}
+        title={'Erro ao registrar a nova conta'}
+      >
+        <Typography variant="body1">{errorMessage}</Typography>
+      </Modal>
     </form>
   )
 }
