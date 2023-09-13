@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext } from 'react'
 import {
   Box,
   Grid,
@@ -14,11 +14,13 @@ import { useFormik } from 'formik'
 import * as yup from 'yup'
 import './styles.scss'
 import { useLogin } from '../../service/queries/user'
+import UserContext from '../../context/user'
 
 const LoginPage = () => {
   const navigate = useNavigate()
   const theme = useTheme()
   const loginRequest = useLogin()
+  const { setState: setUserState } = useContext(UserContext)
 
   const formik = useFormik({
     initialValues: {
@@ -33,12 +35,11 @@ const LoginPage = () => {
       password: yup.string().required('O campo é obrigatório'),
     }),
     onSubmit: async (values) => {
-      const response = await loginRequest.mutate({
+      const response = await loginRequest.mutateAsync({
         email: values.email,
         password: values.password,
       })
-
-      console.log(response)
+      setUserState(response)
     },
   })
 

@@ -25,6 +25,6 @@ export const apiPublicRequest = async ({
   }
 
   return await fetch(endpoint, options)
-    .then(async (response) => await response.json())
+    .then((response) => response.json())
     .catch((error) => console.error(error))
 }

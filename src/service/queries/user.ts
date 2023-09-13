@@ -24,7 +24,6 @@ export const useCreateUser = () => {
       },
       method: 'POST',
     })
-    console.log(response)
     return response ?? {}
   })
 }
@@ -44,7 +43,6 @@ export const useLogin = () => {
       },
       method: 'POST',
     })
-
     return response ?? {}
   })
 }

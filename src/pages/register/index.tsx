@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import {
   Box,
   Button,
@@ -19,11 +19,13 @@ import './styles.scss'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
 import { useCreateUser } from '../../service/queries/user'
+import UserContext from '../../context/user'
 
 const RegisterPage = () => {
   const navigate = useNavigate()
   const theme = useTheme()
   const createUserRequest = useCreateUser()
+  const { setState: setUserState } = useContext(UserContext)
 
   const formik = useFormik({
     initialValues: {
@@ -65,11 +67,11 @@ const RegisterPage = () => {
         ),
     }),
     onSubmit: async (values) => {
-      const response = await createUserRequest.mutate({
+      const response = await createUserRequest.mutateAsync({
         ...values,
       })
 
-      console.log(response)
+      setUserState(response)
     },
   })
 
