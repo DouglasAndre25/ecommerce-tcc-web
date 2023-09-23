@@ -29,7 +29,7 @@ const RecomendationPage = () => {
           <>CARREGANDO...</>
         ) : (
           <>
-            {data.length ? (
+            {data?.length ? (
               <>
                 {data?.map((product: ProductData) => (
                   <Box key={product.id} margin={3}>

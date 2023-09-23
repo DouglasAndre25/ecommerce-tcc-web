@@ -2,5 +2,7 @@
   "REGISTER": "/register",
   "LOGIN": "/login",
   "HOME": "/",
-  "RECOMENDATION_CATEGORY": "/recomendation/:id"
+  "RECOMENDATION_CATEGORY": "/recomendation/:id",
+  "MY_PROFILE": "my-profile",
+  "PRODUCT_HISTORY": "product-history"
 }

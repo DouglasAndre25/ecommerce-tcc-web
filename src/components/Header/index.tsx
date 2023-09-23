@@ -1,12 +1,31 @@
-import React, { useContext, Fragment } from 'react'
-import { AppBar, Toolbar, Typography, Link, Divider, Box } from '@mui/material'
+import React, { useContext, Fragment, useState } from 'react'
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Link,
+  Divider,
+  Box,
+  Button,
+  Menu,
+  MenuItem,
+} from '@mui/material'
 import routes from '../../commons/i18n/routes.json'
 import UserContext from '../../context/user'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import { getRecomendationLabel } from '../../utils/recomendation'
 
 const Header = () => {
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const { state } = useContext(UserContext)
+  const open = Boolean(anchorEl)
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget)
+  }
+  const handleClose = () => {
+    setAnchorEl(null)
+  }
 
   return (
     <AppBar position="static">
@@ -31,10 +50,58 @@ const Header = () => {
           }}
         >
           {state?.user ? (
-            <>
-              <AccountCircleIcon fontSize="large" />
-              <Typography variant="body1">{`${state.user?.name} ${state.user?.lastname}`}</Typography>
-            </>
+            <div>
+              <Button
+                id="basic-button"
+                aria-controls={open ? 'basic-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? 'true' : undefined}
+                onClick={handleClick}
+                color="inherit"
+              >
+                <Box display="flex" flexDirection="row" alignItems="center">
+                  <AccountCircleIcon fontSize="large" />
+                  <Typography variant="body1">{`${state.user?.name} ${state.user?.lastname}`}</Typography>
+                </Box>
+              </Button>
+              <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                MenuListProps={{
+                  'aria-labelledby': 'basic-button',
+                }}
+              >
+                <MenuItem>
+                  <Link
+                    color="inherit"
+                    underline="none"
+                    href={routes.MY_PROFILE}
+                  >
+                    Meu perfil
+                  </Link>
+                </MenuItem>
+                <MenuItem>
+                  <Link
+                    color="inherit"
+                    underline="none"
+                    href={routes.PRODUCT_HISTORY}
+                  >
+                    Histórico de produtos
+                  </Link>
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    localStorage.clear()
+                    sessionStorage.clear()
+                    window.location.href = routes.LOGIN
+                  }}
+                >
+                  Sair
+                </MenuItem>
+              </Menu>
+            </div>
           ) : (
             <>
               <Link href={routes.LOGIN} color="inherit" underline="none">
