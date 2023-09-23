@@ -1,5 +1,6 @@
 {
   "REGISTER": "/register",
   "LOGIN": "/login",
-  "HOME": "/"
+  "HOME": "/",
+  "RECOMENDATION_CATEGORY": "/recomendation/:id"
 }

@@ -1,5 +1,5 @@
 import { useQuery } from 'react-query'
-import { apiPublicRequest } from '../requests'
+import { apiPublicRequest, apiRecomendationPublicRequest } from '../requests'
 
 export const useProducts = (total: number) => {
   return useQuery(['products', total], async () => {
@@ -10,4 +10,22 @@ export const useProducts = (total: number) => {
 
     return response
   })
+}
+
+export const useProductRecomendation = (
+  category: string,
+  params: string,
+  userId: string,
+) => {
+  return useQuery(
+    ['recomendation-products', category, params, userId],
+    async () => {
+      const response = await apiRecomendationPublicRequest({
+        url: `/api/recommended/${userId}?category=${category}&param=${params}`,
+        method: 'GET',
+      })
+
+      return response
+    },
+  )
 }

@@ -28,3 +28,25 @@ export const apiPublicRequest = async ({
     .then((response) => response.json())
     .catch((error) => console.error(error))
 }
+
+export const apiRecomendationPublicRequest = async ({
+  url,
+  body,
+  method = HttpMethods.GET,
+  headers = new Headers(),
+}: ApiPublicRequestParams) => {
+  const { REACT_APP_RECOMENDATION_API_URL } = process.env
+  const endpoint = `${REACT_APP_RECOMENDATION_API_URL}${url}`
+
+  headers.append('Content-Type', 'application/json')
+
+  const options = {
+    headers,
+    method,
+    body: JSON.stringify(body),
+  }
+
+  return await fetch(endpoint, options)
+    .then((response) => response.json())
+    .catch((error) => console.error(error))
+}

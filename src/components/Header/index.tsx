@@ -1,8 +1,9 @@
-import React, { useContext } from 'react'
+import React, { useContext, Fragment } from 'react'
 import { AppBar, Toolbar, Typography, Link, Divider, Box } from '@mui/material'
 import routes from '../../commons/i18n/routes.json'
 import UserContext from '../../context/user'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
+import { getRecomendationLabel } from '../../utils/recomendation'
 
 const Header = () => {
   const { state } = useContext(UserContext)
@@ -31,8 +32,8 @@ const Header = () => {
         >
           {state?.user ? (
             <>
-              <Typography>{`${state.user?.name} ${state.user?.lastname}`}</Typography>
-              <AccountCircleIcon />
+              <AccountCircleIcon fontSize="large" />
+              <Typography variant="body1">{`${state.user?.name} ${state.user?.lastname}`}</Typography>
             </>
           ) : (
             <>
@@ -47,6 +48,34 @@ const Header = () => {
           )}
         </Box>
       </Toolbar>
+      <Divider />
+      {state?.user && (
+        <Toolbar>
+          <Box
+            display="flex"
+            flexDirection="row"
+            width="100%"
+            justifyContent="space-between"
+          >
+            <Typography>Conheça seus produtos recomendados: </Typography>
+            {state.user.recomendations.map((recomendation: string) => (
+              <Fragment key={recomendation}>
+                {recomendation && (
+                  <Typography variant="body1" marginX={1}>
+                    <Link
+                      href={`/recomendation/${recomendation}`}
+                      color="inherit"
+                      underline="none"
+                    >
+                      {getRecomendationLabel(recomendation)}
+                    </Link>
+                  </Typography>
+                )}
+              </Fragment>
+            ))}
+          </Box>
+        </Toolbar>
+      )}
     </AppBar>
   )
 }
