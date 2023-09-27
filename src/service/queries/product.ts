@@ -12,11 +12,10 @@ export const useProducts = (total: number) => {
   })
 }
 
-export const useProductRecomendation = (
-  category: string,
-  params: string,
-  userId: string,
-) => {
+export const useProductRecomendation = (category: string, params: string) => {
+  const {
+    user: { id: userId },
+  } = JSON.parse(sessionStorage.getItem('user') ?? '{}')
   return useQuery(
     ['recomendation-products', category, params, userId],
     async () => {

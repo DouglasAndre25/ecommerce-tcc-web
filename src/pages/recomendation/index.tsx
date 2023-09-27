@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { useParams } from 'react-router-dom'
 import { Box, Typography } from '@mui/material'
 import {
@@ -6,17 +6,14 @@ import {
   getRecomendationLabel,
 } from '../../utils/recomendation'
 import { useProductRecomendation } from '../../service/queries/product'
-import UserContext from '../../context/user'
 import { ProductData } from '../../types/product'
 import ProductCard from '../../components/ProductCard'
 
 const RecomendationPage = () => {
-  const { state } = useContext(UserContext)
   const { id } = useParams()
   const { data, isLoading } = useProductRecomendation(
     getRecomendationCategory(id ?? ''),
     String(id),
-    state?.user.id,
   )
 
   return (
