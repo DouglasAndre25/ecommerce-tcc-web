@@ -1,5 +1,9 @@
 import { useQuery } from 'react-query'
-import { apiPublicRequest, apiRecomendationPublicRequest } from '../requests'
+import {
+  apiPrivateRequest,
+  apiPublicRequest,
+  apiRecomendationPublicRequest,
+} from '../requests'
 
 export const useProducts = (total: number) => {
   return useQuery(['products', total], async () => {
@@ -27,4 +31,17 @@ export const useProductRecomendation = (category: string, params: string) => {
       return response
     },
   )
+}
+
+export const useProductHistory = () => {
+  return useQuery(['history-products'], async () => {
+    const response = await apiPrivateRequest({
+      url: '/product-history',
+      method: 'GET',
+    })
+
+    console.log(response?.data?.map((data: any) => data?.Product))
+
+    return response?.data?.map((data: any) => data?.Product)
+  })
 }

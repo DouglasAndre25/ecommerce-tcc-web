@@ -29,6 +29,31 @@ export const apiPublicRequest = async ({
     .catch((error) => console.error(error))
 }
 
+export const apiPrivateRequest = async ({
+  url,
+  body,
+  method = HttpMethods.GET,
+  headers = new Headers(),
+}: ApiPublicRequestParams) => {
+  const { REACT_APP_API_URL } = process.env
+  const endpoint = `${REACT_APP_API_URL}${url}`
+
+  const { token } = JSON.parse(sessionStorage.getItem('user') ?? '{}')
+
+  headers.append('Content-Type', 'application/json')
+  headers.append('Authorization', `Bearer ${token}`)
+
+  const options = {
+    headers,
+    method,
+    body: JSON.stringify(body),
+  }
+
+  return await fetch(endpoint, options)
+    .then((response) => response.json())
+    .catch((error) => console.error(error))
+}
+
 export const apiRecomendationPublicRequest = async ({
   url,
   body,

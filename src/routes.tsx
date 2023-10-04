@@ -5,6 +5,7 @@ import LoginPage from './pages/login'
 import RegisterPage from './pages/register'
 import HomePage from './pages/home'
 import RecomendationPage from './pages/recomendation'
+import ProductHistoryPage from './pages/productHistory'
 
 const Routes = () => {
   return (
@@ -17,6 +18,7 @@ const Routes = () => {
           path={routes.RECOMENDATION_CATEGORY}
           Component={RecomendationPage}
         />
+        <Route path={routes.PRODUCT_HISTORY} Component={ProductHistoryPage} />
       </RoutesDOM>
     </BrowserRouter>
   )
