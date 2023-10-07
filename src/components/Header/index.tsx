@@ -30,7 +30,12 @@ const Header = () => {
   return (
     <AppBar position="static">
       <Toolbar>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+        <Typography
+          fontStyle="italic"
+          variant="h6"
+          component="div"
+          sx={{ flexGrow: 1, fontWeight: 'bold' }}
+        >
           <Link href={routes.HOME} color="inherit" underline="none">
             FashionFusion
           </Link>
@@ -132,7 +137,6 @@ const Header = () => {
                     <Link
                       href={`/recomendation/${recomendation}`}
                       color="inherit"
-                      underline="none"
                     >
                       {getRecomendationLabel(recomendation)}
                     </Link>

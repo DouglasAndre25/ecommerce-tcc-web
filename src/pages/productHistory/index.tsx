@@ -1,11 +1,30 @@
-import React from 'react'
-import { useProductHistory } from '../../service/queries/product'
-import { Box, Typography } from '@mui/material'
+import React, { useState } from 'react'
+import {
+  useDeleteProductHistory,
+  useProductHistory,
+} from '../../service/queries/product'
+import { Box, Button, IconButton, Typography } from '@mui/material'
+import DeleteIcon from '@mui/icons-material/Delete'
 import { ProductData } from '../../types/product'
 import ProductCard from '../../components/ProductCard'
+import Modal from '../../components/Modal'
 
 const ProductHistoryPage = () => {
   const { data, isLoading } = useProductHistory()
+  const deleteProductHistory = useDeleteProductHistory()
+
+  const [openModal, setOpenModal] = useState(false)
+  const [productHistoryId, setProductHistoryId] = useState(0)
+
+  const onClickModal = (id: number) => {
+    setProductHistoryId(id)
+    setOpenModal(true)
+  }
+
+  const onDeleteProductHistory = async () => {
+    await deleteProductHistory.mutateAsync(productHistoryId)
+    setOpenModal(false)
+  }
 
   return (
     <Box display="flex" flexDirection="column" alignItems="center" padding={2}>
@@ -21,6 +40,16 @@ const ProductHistoryPage = () => {
               <>
                 {data?.map((product: ProductData) => (
                   <Box key={product.id} margin={3}>
+                    <Box display="flex">
+                      <IconButton
+                        onClick={() =>
+                          onClickModal(product.productHistoryId ?? 0)
+                        }
+                      >
+                        <DeleteIcon color="error" />
+                        <Typography color="red">Excluir</Typography>
+                      </IconButton>
+                    </Box>
                     <ProductCard product={product} />
                   </Box>
                 ))}
@@ -31,6 +60,20 @@ const ProductHistoryPage = () => {
           </>
         )}
       </Box>
+      <Modal
+        open={openModal}
+        onClose={() => {
+          setOpenModal(false)
+        }}
+        title={'Excluir produto do histórico?'}
+      >
+        <Box display="flex" flexDirection="row" justifyContent="space-between">
+          <Button variant="contained" onClick={onDeleteProductHistory}>
+            Sim
+          </Button>
+          <Button onClick={() => setOpenModal(false)}>Não</Button>
+        </Box>
+      </Modal>
     </Box>
   )
 }

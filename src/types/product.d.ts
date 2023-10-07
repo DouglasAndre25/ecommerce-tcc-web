@@ -7,4 +7,5 @@ export interface ProductData {
   imgUrl: string
   saleQtd: number
   description: string
+  productHistoryId?: number
 }

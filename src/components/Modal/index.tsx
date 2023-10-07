@@ -26,6 +26,7 @@ const Modal = ({ open, onClose, title, children }: ModalProps) => {
             position: 'absolute',
             right: 8,
             top: 8,
+            paddingRight: '15px',
           }}
         >
           <CloseIcon />

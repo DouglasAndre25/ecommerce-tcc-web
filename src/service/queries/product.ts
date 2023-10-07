@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query'
+import { useMutation, useQuery, useQueryClient } from 'react-query'
 import {
   apiPrivateRequest,
   apiPublicRequest,
@@ -40,8 +40,26 @@ export const useProductHistory = () => {
       method: 'GET',
     })
 
-    console.log(response?.data?.map((data: any) => data?.Product))
-
-    return response?.data?.map((data: any) => data?.Product)
+    return response?.data?.map((data: any) => ({
+      ...data?.Product,
+      productHistoryId: data.id,
+    }))
   })
+}
+
+export const useDeleteProductHistory = () => {
+  const queryClient = useQueryClient()
+  return useMutation(
+    async (id: number) => {
+      await apiPrivateRequest({
+        url: `/product-history/${id}`,
+        method: 'DELETE',
+      })
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('history-products')
+      },
+    },
+  )
 }
