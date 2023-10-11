@@ -14,6 +14,7 @@ import routes from '../../commons/i18n/routes.json'
 import UserContext from '../../context/user'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import { getRecomendationLabel } from '../../utils/recomendation'
+import ShoppingBagIcon from '@mui/icons-material/ShoppingBag'
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -55,7 +56,8 @@ const Header = () => {
           }}
         >
           {state?.user ? (
-            <div>
+            <Box display="flex" alignItems="center">
+              <ShoppingBagIcon fontSize="large" />
               <Button
                 id="basic-button"
                 aria-controls={open ? 'basic-menu' : undefined}
@@ -106,7 +108,7 @@ const Header = () => {
                   Sair
                 </MenuItem>
               </Menu>
-            </div>
+            </Box>
           ) : (
             <>
               <Link href={routes.LOGIN} color="inherit" underline="none">

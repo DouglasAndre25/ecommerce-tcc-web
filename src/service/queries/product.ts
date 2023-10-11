@@ -33,6 +33,26 @@ export const useProductRecomendation = (category: string, params: string) => {
   )
 }
 
+export const useCreateProductHistory = () => {
+  const queryClient = useQueryClient()
+  return useMutation(
+    async (productId: number) => {
+      await apiPrivateRequest({
+        url: '/product-history',
+        method: 'POST',
+        body: {
+          productId,
+        },
+      })
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('history-products')
+      },
+    },
+  )
+}
+
 export const useProductHistory = () => {
   return useQuery(['history-products'], async () => {
     const response = await apiPrivateRequest({

@@ -24,6 +24,7 @@ export const useCreateUser = () => {
       },
       method: 'POST',
     })
+
     return response ?? {}
   })
 }

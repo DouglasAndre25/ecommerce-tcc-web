@@ -79,7 +79,7 @@ const RegisterPage = () => {
       })
 
       if (response.data) {
-        setUserState(response)
+        setUserState(response.data)
         navigate(routes.HOME)
       } else if (response.error) {
         setErrorMessage(response.error.message)

@@ -4,6 +4,7 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
 import IconButton from '@mui/material/IconButton'
 import CloseIcon from '@mui/icons-material/Close'
+import { makeStyles } from '@mui/styles'
 
 interface ModalProps {
   open: boolean
@@ -12,9 +13,24 @@ interface ModalProps {
   children: React.ReactElement
 }
 
+const useStyles = makeStyles(() => ({
+  modalContainer: {
+    '& .MuiPaper-root': {
+      overflow: 'hidden',
+    },
+  },
+}))
+
 const Modal = ({ open, onClose, title, children }: ModalProps) => {
+  const classes = useStyles()
+
   return (
-    <Dialog open={open} onClose={onClose} fullWidth>
+    <Dialog
+      open={open}
+      onClose={onClose}
+      fullWidth
+      className={classes.modalContainer}
+    >
       <DialogTitle>
         {title}
         <IconButton
@@ -32,7 +48,7 @@ const Modal = ({ open, onClose, title, children }: ModalProps) => {
           <CloseIcon />
         </IconButton>
       </DialogTitle>
-      <DialogContent dividers>{children}</DialogContent>
+      <DialogContent>{children}</DialogContent>
     </Dialog>
   )
 }
