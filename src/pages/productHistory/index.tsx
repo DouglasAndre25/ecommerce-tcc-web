@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import {
   useDeleteProductHistory,
   useProductHistory,
@@ -8,10 +8,14 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import { ProductData } from '../../types/product'
 import ProductCard from '../../components/ProductCard'
 import Modal from '../../components/Modal'
+import BagContext from '../../context/bag'
+import { useUserBag } from '../../service/queries/bag'
 
 const ProductHistoryPage = () => {
   const { data, isLoading } = useProductHistory()
   const deleteProductHistory = useDeleteProductHistory()
+  const { data: bagData, refetch } = useUserBag()
+  const { setState: setBagState } = useContext(BagContext)
 
   const [openModal, setOpenModal] = useState(false)
   const [productHistoryId, setProductHistoryId] = useState(0)
@@ -25,6 +29,16 @@ const ProductHistoryPage = () => {
     await deleteProductHistory.mutateAsync(productHistoryId)
     setOpenModal(false)
   }
+
+  useEffect(() => {
+    refetch()
+  }, [data])
+
+  useEffect(() => {
+    if (bagData?.data) {
+      setBagState(bagData?.data)
+    }
+  }, [bagData])
 
   return (
     <Box display="flex" flexDirection="column" alignItems="center" padding={2}>

@@ -3,6 +3,7 @@
   "LOGIN": "/login",
   "HOME": "/",
   "RECOMENDATION_CATEGORY": "/recomendation/:id",
-  "MY_PROFILE": "my-profile",
-  "PRODUCT_HISTORY": "product-history"
+  "MY_PROFILE": "/my-profile",
+  "PRODUCT_HISTORY": "/product-history",
+  "BAG": "/bag"
 }

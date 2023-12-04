@@ -3,11 +3,13 @@ import { ProductData } from '../../types/product'
 import Modal from '../Modal'
 import { Box, Typography, Button } from '@mui/material'
 import { makeStyles } from '@mui/styles'
+import { useBuyProduct } from '../../service/queries/product'
 
 interface ProductModalProps {
   product: ProductData
   isOpen: boolean
   onClose: () => void
+  disableBuy: boolean
 }
 
 const useStyles = makeStyles(() => ({
@@ -17,8 +19,18 @@ const useStyles = makeStyles(() => ({
   },
 }))
 
-const ProductModal = ({ product, isOpen, onClose }: ProductModalProps) => {
+const ProductModal = ({
+  product,
+  isOpen,
+  onClose,
+  disableBuy,
+}: ProductModalProps) => {
   const classes = useStyles()
+  const buyProductRequest = useBuyProduct()
+
+  const handleClick = async () => {
+    await buyProductRequest.mutate({ productId: product.id, quantity: 1 })
+  }
 
   return (
     <Modal open={isOpen} onClose={onClose} title="">
@@ -55,7 +67,13 @@ const ProductModal = ({ product, isOpen, onClose }: ProductModalProps) => {
             <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
               R$ {product.price}
             </Typography>
-            <Button variant="contained">Comprar</Button>
+            <Button
+              variant="contained"
+              onClick={handleClick}
+              disabled={disableBuy}
+            >
+              {!disableBuy ? 'Comprar' : 'Adicionado'}
+            </Button>
           </Box>
         </Box>
       </Box>

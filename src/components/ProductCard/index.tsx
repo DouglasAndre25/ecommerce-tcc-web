@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { ProductData } from '../../types/product'
 import {
   Card,
@@ -11,7 +11,11 @@ import {
 } from '@mui/material'
 import { makeStyles, createStyles } from '@mui/styles'
 import ProductModal from '../ProductModal'
-import { useCreateProductHistory } from '../../service/queries/product'
+import {
+  useBuyProduct,
+  useCreateProductHistory,
+} from '../../service/queries/product'
+import BagContext from '../../context/bag'
 
 interface ProductCardProps {
   product: ProductData
@@ -21,7 +25,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     card: {
       width: 345,
-      height: 358,
+      height: 368,
     },
     media: {
       height: 0,
@@ -33,6 +37,11 @@ const useStyles = makeStyles((theme: Theme) =>
 const ProductCard = ({ product }: ProductCardProps) => {
   const classes = useStyles()
   const createProductHistory = useCreateProductHistory()
+  const buyProductRequest = useBuyProduct()
+  const { state: bagState } = useContext(BagContext)
+  const disableBuy = !!bagState?.ProductBags?.find(
+    (productBag: any) => productBag?.Product?.id === product.id,
+  )
 
   const [isModalOpen, setIsModalOpen] = useState(false)
 
@@ -43,6 +52,10 @@ const ProductCard = ({ product }: ProductCardProps) => {
 
   const handleCloseModal = () => {
     setIsModalOpen(false)
+  }
+
+  const handleClick = async () => {
+    await buyProductRequest.mutate({ productId: product.id, quantity: 1 })
   }
 
   return (
@@ -68,6 +81,9 @@ const ProductCard = ({ product }: ProductCardProps) => {
                 {product.name} - {product.brand}
               </Typography>
               <Typography variant="body2" color="textSecondary">
+                id: {product.id}
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
                 Quantidade vendidas: {product.saleQtd}
               </Typography>
               <Typography variant="body2" color="textSecondary">
@@ -84,7 +100,13 @@ const ProductCard = ({ product }: ProductCardProps) => {
               <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
                 R$ {product.price}
               </Typography>
-              <Button variant="contained">Comprar</Button>
+              <Button
+                variant="contained"
+                onClick={handleClick}
+                disabled={disableBuy}
+              >
+                {!disableBuy ? 'Comprar' : 'Adicionado'}
+              </Button>
             </Box>
           </Box>
         </CardContent>
@@ -93,6 +115,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
         product={product}
         isOpen={isModalOpen}
         onClose={handleCloseModal}
+        disableBuy={disableBuy}
       />
     </>
   )

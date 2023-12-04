@@ -9,16 +9,19 @@ import {
   Button,
   Menu,
   MenuItem,
+  IconButton,
 } from '@mui/material'
 import routes from '../../commons/i18n/routes.json'
 import UserContext from '../../context/user'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import { getRecomendationLabel } from '../../utils/recomendation'
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag'
+import BagContext from '../../context/bag'
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const { state } = useContext(UserContext)
+  const { state: bagState } = useContext(BagContext)
   const open = Boolean(anchorEl)
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -57,7 +60,33 @@ const Header = () => {
         >
           {state?.user ? (
             <Box display="flex" alignItems="center">
-              <ShoppingBagIcon fontSize="large" />
+              <div style={{ position: 'relative', display: 'inline-block' }}>
+                <IconButton
+                  onClick={() => {
+                    window.location.pathname = routes.BAG
+                  }}
+                >
+                  <ShoppingBagIcon fontSize="large" sx={{ color: 'white' }} />
+                </IconButton>
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: '0px',
+                    right: '0px',
+                    backgroundColor: 'red',
+                    color: 'white',
+                    borderRadius: '50%',
+                    width: '24px',
+                    height: '24px',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    fontSize: '12px',
+                  }}
+                >
+                  {bagState?.ProductBags?.length}
+                </div>
+              </div>
               <Button
                 id="basic-button"
                 aria-controls={open ? 'basic-menu' : undefined}
@@ -80,29 +109,25 @@ const Header = () => {
                   'aria-labelledby': 'basic-button',
                 }}
               >
-                <MenuItem>
-                  <Link
-                    color="inherit"
-                    underline="none"
-                    href={routes.MY_PROFILE}
-                  >
-                    Meu perfil
-                  </Link>
+                <MenuItem
+                  onClick={() => {
+                    window.location.pathname = routes.MY_PROFILE
+                  }}
+                >
+                  Meu perfil
                 </MenuItem>
-                <MenuItem>
-                  <Link
-                    color="inherit"
-                    underline="none"
-                    href={routes.PRODUCT_HISTORY}
-                  >
-                    Histórico de produtos
-                  </Link>
+                <MenuItem
+                  onClick={() => {
+                    window.location.pathname = routes.PRODUCT_HISTORY
+                  }}
+                >
+                  Histórico de produtos
                 </MenuItem>
                 <MenuItem
                   onClick={() => {
                     localStorage.clear()
                     sessionStorage.clear()
-                    window.location.href = routes.LOGIN
+                    window.location.pathname = routes.LOGIN
                   }}
                 >
                   Sair

@@ -1,15 +1,20 @@
 import { Theme } from '@mui/material'
 import { createTheme } from '@mui/material/styles'
-import { orange, purple } from '@mui/material/colors'
 
 const customTheme: Theme = createTheme({
   palette: {
-    mode: 'light',
-    background: {
-      default: '#fafafa',
+    primary: {
+      light: '#757ce8',
+      main: '#3f50b5',
+      dark: '#002884',
+      contrastText: '#fff',
     },
-    primary: purple,
-    secondary: orange,
+    secondary: {
+      light: '#ff7961',
+      main: '#f44336',
+      dark: '#ba000d',
+      contrastText: '#000',
+    },
   },
 })
 

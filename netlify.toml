@@ -1,0 +1,5 @@
+[[redirects]]
+  from = "/*"
+  to = "http://amazing-douhua-b54943.netlify.app/:splat"
+  status = 301
+  force = true

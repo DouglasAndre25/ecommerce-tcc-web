@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { Box, Typography } from '@mui/material'
 import {
@@ -8,6 +8,8 @@ import {
 import { useProductRecomendation } from '../../service/queries/product'
 import { ProductData } from '../../types/product'
 import ProductCard from '../../components/ProductCard'
+import { useUserBag } from '../../service/queries/bag'
+import BagContext from '../../context/bag'
 
 const RecomendationPage = () => {
   const { id } = useParams()
@@ -15,6 +17,18 @@ const RecomendationPage = () => {
     getRecomendationCategory(id ?? ''),
     String(id),
   )
+  const { setState: setBagState } = useContext(BagContext)
+  const { data: bagData, refetch } = useUserBag()
+
+  useEffect(() => {
+    refetch()
+  }, [data])
+
+  useEffect(() => {
+    if (bagData?.data) {
+      setBagState(bagData?.data)
+    }
+  }, [bagData])
 
   return (
     <Box display="flex" flexDirection="column" alignItems="center" padding={2}>
@@ -28,8 +42,8 @@ const RecomendationPage = () => {
           <>
             {data?.length ? (
               <>
-                {data?.map((product: ProductData) => (
-                  <Box key={product.id} margin={3}>
+                {data?.map((product: ProductData, index: number) => (
+                  <Box key={index} margin={3}>
                     <ProductCard product={product} />
                   </Box>
                 ))}

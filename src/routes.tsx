@@ -6,6 +6,8 @@ import RegisterPage from './pages/register'
 import HomePage from './pages/home'
 import RecomendationPage from './pages/recomendation'
 import ProductHistoryPage from './pages/productHistory'
+import BagPage from './pages/bag'
+import ProfilePage from './pages/profile'
 
 const Routes = () => {
   return (
@@ -19,6 +21,8 @@ const Routes = () => {
           Component={RecomendationPage}
         />
         <Route path={routes.PRODUCT_HISTORY} Component={ProductHistoryPage} />
+        <Route path={routes.BAG} Component={BagPage} />
+        <Route path={routes.MY_PROFILE} Component={ProfilePage} />
       </RoutesDOM>
     </BrowserRouter>
   )

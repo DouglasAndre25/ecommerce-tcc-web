@@ -27,7 +27,9 @@ export const useProductRecomendation = (category: string, params: string) => {
         url: `/api/recommended/${userId}?category=${category}&param=${params}`,
         method: 'GET',
       })
-
+      console.log(
+        response?.map((product: any) => product?.name + ' - ' + product?.brand),
+      )
       return response
     },
   )
@@ -59,7 +61,12 @@ export const useProductHistory = () => {
       url: '/product-history',
       method: 'GET',
     })
-
+    console.log(
+      response?.data?.map(
+        (product: any) =>
+          product?.Product?.name + ' - ' + product?.Product?.brand,
+      ),
+    )
     return response?.data?.map((data: any) => ({
       ...data?.Product,
       productHistoryId: data.id,
@@ -79,6 +86,47 @@ export const useDeleteProductHistory = () => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries('history-products')
+      },
+    },
+  )
+}
+
+interface UseBuyProductParams {
+  productId: number
+  quantity: number
+}
+
+export const useBuyProduct = () => {
+  const { id: bagId } = JSON.parse(sessionStorage.getItem('bag') ?? '{}')
+  const queryClient = useQueryClient()
+  return useMutation(
+    async (body: UseBuyProductParams) => {
+      await apiPrivateRequest({
+        url: `/product-bag/${bagId}`,
+        method: 'PUT',
+        body,
+      })
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('user-bag')
+      },
+    },
+  )
+}
+
+export const useDeleteProduct = () => {
+  const queryClient = useQueryClient()
+  return useMutation(
+    async (id: number) => {
+      await apiPrivateRequest({
+        url: `/product-bag/${id}`,
+        method: 'DELETE',
+      })
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('user-bag')
       },
     },
   )
