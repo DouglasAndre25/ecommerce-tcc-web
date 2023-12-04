@@ -10,6 +10,7 @@ interface ProductModalProps {
   isOpen: boolean
   onClose: () => void
   disableBuy: boolean
+  productImg: string
 }
 
 const useStyles = makeStyles(() => ({
@@ -24,6 +25,7 @@ const ProductModal = ({
   isOpen,
   onClose,
   disableBuy,
+  productImg,
 }: ProductModalProps) => {
   const classes = useStyles()
   const buyProductRequest = useBuyProduct()
@@ -38,8 +40,8 @@ const ProductModal = ({
         <Box>
           <img
             className={classes.imgMedia}
-            srcSet={`${product.imgUrl}`}
-            src={`${product.imgUrl}`}
+            srcSet={`${productImg}`}
+            src={`${productImg}`}
             alt={product.name}
             loading="lazy"
           />

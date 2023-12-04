@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { ProductData } from '../../types/product'
 import {
   Card,
@@ -16,6 +16,7 @@ import {
   useCreateProductHistory,
 } from '../../service/queries/product'
 import BagContext from '../../context/bag'
+import { getImageProxy } from '../../service/queries/image'
 
 interface ProductCardProps {
   product: ProductData
@@ -42,6 +43,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
   const disableBuy = !!bagState?.ProductBags?.find(
     (productBag: any) => productBag?.Product?.id === product.id,
   )
+  const [productImg, setProductImg] = useState('')
 
   const [isModalOpen, setIsModalOpen] = useState(false)
 
@@ -58,12 +60,18 @@ const ProductCard = ({ product }: ProductCardProps) => {
     await buyProductRequest.mutate({ productId: product.id, quantity: 1 })
   }
 
+  useEffect(() => {
+    getImageProxy(product.imgUrl).then((response) =>
+      setProductImg(response ?? ''),
+    )
+  }, [product.imgUrl])
+
   return (
     <>
       <Card className={classes.card} onClick={handleOpenModal}>
         <CardMedia
           className={classes.media}
-          image={product.imgUrl}
+          image={productImg}
           title={product.name}
         />
         <CardContent>
@@ -116,6 +124,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         disableBuy={disableBuy}
+        productImg={productImg}
       />
     </>
   )
